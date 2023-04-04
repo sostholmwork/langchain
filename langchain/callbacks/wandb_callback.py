@@ -441,6 +441,10 @@ class WandbCallbackHandler(BaseMetadataCallbackHandler, BaseCallbackHandler):
         if self.stream_logs:
             self.run.log(resp)
 
+    def on_agent_observation(self, observation: str, **kwargs: Any) -> Any:
+        """Run on agent observation."""
+        pass
+
     def _create_session_analysis_df(self) -> Any:
         """Create a dataframe with all the information from the session."""
         pd = import_pandas()

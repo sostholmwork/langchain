@@ -206,3 +206,7 @@ class ArizeCallbackHandler(BaseCallbackHandler):
     def on_agent_finish(self, finish: AgentFinish, **kwargs: Any) -> None:
         """Do nothing"""
         pass
+
+    def on_agent_observation(self, observation: str, **kwargs: Any) -> Any:
+        """Do nothing"""
+        pass

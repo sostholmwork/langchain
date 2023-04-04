@@ -372,6 +372,10 @@ class AimCallbackHandler(BaseMetadataCallbackHandler, BaseCallbackHandler):
         )
         self._run.track(aim.Text(text), name="on_agent_action", context=resp)
 
+    def on_agent_observation(self, observation: str, **kwargs: Any) -> Any:
+        """Run on agent observation."""
+        pass
+
     def flush_tracker(
         self,
         repo: Optional[str] = None,

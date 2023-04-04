@@ -314,6 +314,10 @@ class ClearMLCallbackHandler(BaseMetadataCallbackHandler, BaseCallbackHandler):
         if self.stream_logs:
             self.logger.report_text(resp)
 
+    def on_agent_observation(self, observation: str, **kwargs: Any) -> Any:
+        """Do nothing"""
+        pass
+
     def analyze_text(self, text: str) -> dict:
         """Analyze text using textstat and spacy.
 

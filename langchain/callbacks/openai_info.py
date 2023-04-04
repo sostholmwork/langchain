@@ -108,3 +108,7 @@ class OpenAICallbackHandler(BaseCallbackHandler):
     ) -> None:
         """Run on agent end."""
         pass
+
+    def on_agent_observation(self, observation: str, **kwargs: Any) -> Any:
+        """Run on agent observation."""
+        pass

@@ -569,6 +569,9 @@ class AgentExecutor(Chain, BaseModel):
             observation = InvalidTool().run(
                 output.tool, verbose=self.verbose, color=None, **tool_run_kwargs
             )
+        self.callback_manager.on_agent_observation(
+            observation, verbose=self.verbose, color="green"
+        )
         return output, observation
 
     async def _atake_next_step(
