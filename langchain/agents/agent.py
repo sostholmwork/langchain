@@ -617,6 +617,14 @@ class AgentExecutor(Chain, BaseModel):
                 output.tool, verbose=self.verbose, color=None, **tool_run_kwargs
             )
             return_direct = False
+        if self.callback_manager.is_async:
+            await self.callback_manager.on_agent_observation(
+                observation, verbose=self.verbose, color="green"
+            )
+        else:
+            self.callback_manager.on_agent_observation(
+                observation, verbose=self.verbose, color="green"
+            )
         return output, observation
 
     def _call(self, inputs: Dict[str, str]) -> Dict[str, Any]:
