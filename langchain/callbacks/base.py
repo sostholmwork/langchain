@@ -575,6 +575,23 @@ class AsyncCallbackManager(BaseCallbackManager):
                                 handler.on_agent_finish, finish, **kwargs
                             ),
                         )
+    
+    async def on_agent_observation(
+        self, observation: str, verbose: bool = False, **kwargs: Any
+    ) -> None:
+        """Run on agent end."""
+        for handler in self.handlers:
+            if not handler.ignore_agent:
+                if verbose or handler.always_verbose:
+                    if asyncio.iscoroutinefunction(handler.on_agent_observation):
+                        await handler.on_agent_observation(observation, **kwargs)
+                    else:
+                        await asyncio.get_event_loop().run_in_executor(
+                            None,
+                            functools.partial(
+                                handler.on_agent_observation, observation, **kwargs
+                            ),
+                        )
 
     def add_handler(self, handler: BaseCallbackHandler) -> None:
         """Add a handler to the callback manager."""
