@@ -62,3 +62,6 @@ class StreamingStdOutCallbackHandler(BaseCallbackHandler):
 
     def on_agent_finish(self, finish: AgentFinish, **kwargs: Any) -> None:
         """Run on agent end."""
+
+    def on_agent_observation(self, observation: str, **kwargs: Any) -> Any:
+        """Run on agent observation."""

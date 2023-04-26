@@ -89,3 +89,7 @@ class StreamlitCallbackHandler(BaseCallbackHandler):
         """Run on agent end."""
         # st.write requires two spaces before a newline to render it
         st.write(finish.log.replace("\n", "  \n"))
+
+    def on_agent_observation(self, observation: str, **kwargs: Any) -> Any:
+        """Run on agent observation."""
+        st.write(observation.replace("\n", "  \n"))

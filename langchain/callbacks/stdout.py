@@ -101,3 +101,7 @@ class StdOutCallbackHandler(BaseCallbackHandler):
     ) -> None:
         """Run on agent end."""
         print_text(finish.log, color=color if self.color else color, end="\n")
+
+    def on_agent_observation(self, observation: str, color: Optional[str] = None, **kwargs: Any) -> Any:
+        """Run on agent observation."""
+        print_text(observation, color=color if self.color else color, end="\n")

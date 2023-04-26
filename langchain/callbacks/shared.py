@@ -111,6 +111,11 @@ class SharedCallbackManager(Singleton, BaseCallbackManager):
         with self._lock:
             self._callback_manager.on_agent_finish(finish, **kwargs)
 
+    def on_agent_observation(self, observation: str, **kwargs: Any) -> Any:
+        """Run on agent observation."""
+        with self._lock:
+            self._callback_manager.on_agent_observation(observation, **kwargs)
+
     def add_handler(self, callback: BaseCallbackHandler) -> None:
         """Add a callback to the callback manager."""
         with self._lock:

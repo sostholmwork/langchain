@@ -707,6 +707,9 @@ class AgentExecutor(Chain):
                     **tool_run_kwargs,
                 )
             result.append((agent_action, observation))
+        self.callback_manager.on_agent_observation(
+            observation, verbose=self.verbose, color="green"
+        )
         return result
 
     async def _atake_next_step(
@@ -764,6 +767,14 @@ class AgentExecutor(Chain):
                     verbose=self.verbose,
                     color=None,
                     **tool_run_kwargs,
+                )
+            if self.callback_manager.is_async:
+                await self.callback_manager.on_agent_observation(
+                    observation, verbose=self.verbose, color="green"
+                )
+            else:
+                self.callback_manager.on_agent_observation(
+                    observation, verbose=self.verbose, color="green"
                 )
             return agent_action, observation
 

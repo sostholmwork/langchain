@@ -94,6 +94,9 @@ class BaseCallbackHandler(ABC):
     def on_agent_finish(self, finish: AgentFinish, **kwargs: Any) -> Any:
         """Run on agent end."""
 
+    @abstractmethod
+    def on_agent_observation(self, observation: str, **kwargs: Any) -> Any:
+        """Run on agent observation."""
 
 class BaseCallbackManager(BaseCallbackHandler, ABC):
     """Base callback manager that can be used to handle callbacks from LangChain."""
@@ -259,6 +262,15 @@ class CallbackManager(BaseCallbackManager):
             if not handler.ignore_agent:
                 if verbose or handler.always_verbose:
                     handler.on_agent_finish(finish, **kwargs)
+
+    def on_agent_observation(
+        self, observation: str, verbose: bool = False, **kwargs: Any
+    ) -> None:
+        """Run on agent end."""
+        for handler in self.handlers:
+            if not handler.ignore_agent:
+                if verbose or handler.always_verbose:
+                    handler.on_agent_observation(observation, **kwargs)
 
     def add_handler(self, handler: BaseCallbackHandler) -> None:
         """Add a handler to the callback manager."""
@@ -495,6 +507,35 @@ class AsyncCallbackManager(BaseCallbackManager):
         await self._handle_event(
             "on_agent_finish", "ignore_agent", verbose, finish, **kwargs
         )
+        for handler in self.handlers:
+            if not handler.ignore_agent:
+                if verbose or handler.always_verbose:
+                    if asyncio.iscoroutinefunction(handler.on_agent_finish):
+                        await handler.on_agent_finish(finish, **kwargs)
+                    else:
+                        await asyncio.get_event_loop().run_in_executor(
+                            None,
+                            functools.partial(
+                                handler.on_agent_finish, finish, **kwargs
+                            ),
+                        )
+    
+    async def on_agent_observation(
+        self, observation: str, verbose: bool = False, **kwargs: Any
+    ) -> None:
+        """Run on agent end."""
+        for handler in self.handlers:
+            if not handler.ignore_agent:
+                if verbose or handler.always_verbose:
+                    if asyncio.iscoroutinefunction(handler.on_agent_observation):
+                        await handler.on_agent_observation(observation, **kwargs)
+                    else:
+                        await asyncio.get_event_loop().run_in_executor(
+                            None,
+                            functools.partial(
+                                handler.on_agent_observation, observation, **kwargs
+                            ),
+                        )
 
     def add_handler(self, handler: BaseCallbackHandler) -> None:
         """Add a handler to the callback manager."""
