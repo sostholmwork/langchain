@@ -76,6 +76,7 @@ class Weaviate(VectorStore):
         text_key: str,
         embedding: Optional[Embeddings] = None,
         attributes: Optional[List[str]] = None,
+        k: int = None
     ):
         """Initialize with Weaviate client."""
         try:
@@ -96,6 +97,7 @@ class Weaviate(VectorStore):
         self._query_attrs = [self._text_key]
         if attributes is not None:
             self._query_attrs.extend(attributes)
+        self._k = k
 
     def add_texts(
         self,
@@ -135,6 +137,8 @@ class Weaviate(VectorStore):
         Returns:
             List of Documents most similar to the query.
         """
+        k = self._k if self._k is not None else k
+        
         content: Dict[str, Any] = {"concepts": [query]}
         if kwargs.get("search_distance"):
             content["certainty"] = kwargs.get("search_distance")
